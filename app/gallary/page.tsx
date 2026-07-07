@@ -1,38 +1,87 @@
-// app/(public)/gallery/page.tsx
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+"use client";
 
-const PALPA_IMAGES = [
-  "https://images.unsplash.com/photo-1546548970-71785318a17b?q=80&w=600",
-  "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=600",
-  "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=600",
-  "https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=600",
-];
+import { useEffect, useState } from "react";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import Image from "next/image";
+
+interface GalleryItem {
+  id: string;
+  description: string;
+  imageUrl: string;
+}
 
 export default function GalleryPage() {
+  const [images, setImages] = useState<GalleryItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchGallery = async () => {
+      try {
+        const q = query(
+          collection(db, "gallery"),
+          orderBy("createdAt", "desc"),
+        );
+        const querySnapshot = await getDocs(q);
+        const data = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as GalleryItem[];
+
+        setImages(data);
+      } catch (error) {
+        console.error("Error fetching gallery items: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGallery();
+  }, []);
+
+  if (loading)
+    return (
+      <div className="text-center p-10 text-xl text-black">
+        Loading Resort Gallery...
+      </div>
+    );
+
   return (
-    <div className="flex flex-col min-h-screen bg-stone-50">
-      <Navbar />
-      <main className="flex-grow max-w-7xl w-full mx-auto px-4 py-12">
-        <h1 className="text-4xl font-serif text-stone-900 mb-8 text-center">
-          Glimpses of Palpa
-        </h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {PALPA_IMAGES.map((src, i) => (
+    <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <h1 className="text-4xl font-bold mb-2 text-center text-gray-800">
+        Palpa Hill Resort Gallery
+      </h1>
+      <p className="text-center text-gray-600 mb-10">
+        Glimpses of luxury, nature, and comfort
+      </p>
+
+      {images.length === 0 ? (
+        <p className="text-center text-gray-500 my-10">
+          No resort images published yet.
+        </p>
+      ) : (
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+          {images.map((img) => (
             <div
-              key={i}
-              className="h-64 rounded-xl overflow-hidden border border-stone-200 shadow-xs"
+              key={img.id}
+              className="break-inside-avoid rounded-xl overflow-hidden shadow-md bg-white border border-gray-100 group"
             >
-              <img
-                src={src}
-                alt="Resort layout"
-                className="w-full h-full object-cover hover:scale-105 transition duration-300"
-              />
+              <div className="relative w-full h-auto min-h-[250px] bg-gray-50">
+                <img
+                  src={img.imageUrl}
+                  alt={img.description}
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-102"
+                />
+              </div>
+              <div className="p-4 bg-white">
+                <p className="text-gray-700 text-sm font-medium leading-relaxed">
+                  {img.description}
+                </p>
+              </div>
             </div>
           ))}
         </div>
-      </main>
-      <Footer />
+      )}
     </div>
   );
 }

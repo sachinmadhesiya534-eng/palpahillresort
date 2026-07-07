@@ -60,6 +60,7 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-stone-50 text-stone-900 overflow-x-hidden">
+      <Navbar />
       {/* 1. Moving Pictures Hero Carousel Slider Section */}
       <section className="relative h-[85vh] w-full bg-stone-950 overflow-hidden">
         {HERO_IMAGES.map((slide, index) => (
@@ -208,6 +209,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }
