@@ -37,13 +37,13 @@ const SPECIALTIES = [
     name: "The Clay Kitchen & Restaurant",
     desc: "Savor local Palpali Chukauni and organic Batuk platters prepared over traditional firewood stoves.",
     img: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=600",
-    link: "/restaurant",
+    link: "/restaurent",
   },
   {
     name: "Panoramic Sitting Area",
     desc: "An open-air stone terrace looking directly over the rolling valleys and morning fog banks of Palpa.",
     img: "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?q=80&w=600",
-    link: "/gallery",
+    link: "/gallary",
   },
 ];
 
