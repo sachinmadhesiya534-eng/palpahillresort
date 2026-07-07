@@ -1,69 +1,95 @@
-// app/rooms/page.tsx (Customer Side Room Grid)
 "use client";
-import { useEffect, useState } from "react";
-import { db } from "@/lib/firebase";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
-import Image from "next/image";
 
-interface Room {
+interface RoomItem {
   id: string;
-  title: string;
+  name: string;
   price: number;
+  view: string;
+  description: string;
   imageUrl: string;
 }
 
+const ROOMS_DATA: RoomItem[] = [
+  {
+    id: "r1",
+    name: "Standard Mud Cottage",
+    price: 4500,
+    view: "Terraced Garden & Local Village View",
+    description:
+      "Handcrafted clay walls keeping you naturally cool, featuring locally woven textiles and rustic furniture.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: "r2",
+    name: "Hills-Facing Deluxe Suite",
+    price: 7000,
+    view: "Panoramic Palpa Valley & Sunrise Hills",
+    description:
+      "Spacious layout with massive viewing windows overlooking the iconic misty morning ridges of Palpa.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=800&q=80",
+  },
+];
+
 export default function RoomsPage() {
-  const [rooms, setRooms] = useState<Room[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchRooms = async () => {
-      try {
-        const q = query(collection(db, "rooms"), orderBy("createdAt", "desc"));
-        const querySnapshot = await getDocs(q);
-        const roomsData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as Room[];
-
-        setRooms(roomsData);
-      } catch (error) {
-        console.error("Error fetching rooms: ", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRooms();
-  }, []);
-
-  if (loading)
-    return <div className="text-center p-10">Loading beautiful rooms...</div>;
-
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6 text-center">Our Luxury Rooms</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {rooms.map((room) => (
-          <div
-            key={room.id}
-            className="border rounded-lg overflow-hidden shadow-lg bg-white"
-          >
-            <div className="relative h-48 w-full">
-              <Image
-                src={room.imageUrl}
-                alt={room.title}
-                fill
-                className="object-cover"
-              />
+    <div className="container mx-auto px-4 py-8 max-w-5xl">
+      <section id="rooms">
+        <h1 className="text-4xl font-bold mb-2 text-center text-gray-800">
+          Our Cottages & Stay
+        </h1>
+        <p className="text-center text-gray-600 mb-8">
+          Eco-friendly clay structures fused with traditional architectural
+          aesthetics and luxury comforts
+        </p>
+
+        <div className="grid md:grid-cols-2 gap-8">
+          {ROOMS_DATA.map((room) => (
+            <div
+              key={room.id}
+              className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow"
+            >
+              {/* Fixed Image Box using native img */}
+              <div className="h-64 w-full bg-gray-100">
+                <img
+                  src={room.imageUrl}
+                  alt={room.name}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+
+              <div className="p-6 space-y-4">
+                <div className="flex justify-between items-start gap-4">
+                  <h3 className="text-xl font-bold text-gray-800">
+                    {room.name}
+                  </h3>
+                  <span className="text-green-700 font-bold text-lg shrink-0">
+                    Rs. {room.price.toLocaleString()}
+                    <span className="text-xs text-gray-500 font-normal">
+                      /night
+                    </span>
+                  </span>
+                </div>
+
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {room.description}
+                </p>
+
+                <div className="bg-gray-50 p-3 rounded-lg text-xs flex flex-col gap-1">
+                  <span className="font-bold text-gray-400 uppercase tracking-wider">
+                    Room View Scenery
+                  </span>
+                  <span className="text-gray-700 text-sm font-medium">
+                    🌄 {room.view}
+                  </span>
+                </div>
+              </div>
             </div>
-            <div className="p-4">
-              <h2 className="text-xl font-semibold">{room.title}</h2>
-              <p className="text-gray-600 mt-2">Rs. {room.price} / night</p>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

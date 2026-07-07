@@ -23,7 +23,9 @@ export default function ContactPage() {
               <h4 className="font-bold uppercase tracking-wider text-xs text-stone-400">
                 Call Us
               </h4>
-              <p>+977-98XXXXXXXX</p>
+              <p>+977-986758242</p>
+              <p>+977-9766720804</p>
+              <p>+977-9867582432</p>
             </div>
             <div>
               <h4 className="font-bold uppercase tracking-wider text-xs text-stone-400">

@@ -61,7 +61,7 @@ export default function Navbar() {
                 : "bg-amber-800 hover:bg-amber-900 text-stone-50"
             }`}
           >
-            Book Now
+            ENQUIRY FOR RESERVATION
           </Link>
         </div>
 
