@@ -16,7 +16,6 @@ export default function Navbar() {
     { name: "Restaurant", href: "/restaurent" }, // Matches your 'restaurent' folder name
     { name: "About", href: "/about" },
     { name: "Contact", href: "/contact" },
-    { name: "Bookings", href: "/booking" },
   ];
 
   return (
@@ -27,7 +26,7 @@ export default function Navbar() {
           href="/"
           className="text-xl sm:text-2xl font-serif font-bold tracking-widest text-amber-950 transition hover:opacity-90"
         >
-          HAVEN RESORT
+          PALPA HILL RESORT
         </Link>
 
         {/* Desktop Navigation Links (Hidden on Mobile) */}
@@ -142,7 +141,7 @@ export default function Navbar() {
                     : "bg-amber-800 hover:bg-amber-900 text-stone-50"
                 }`}
               >
-                Book Now
+                ENQUIRY
               </Link>
             </div>
           </div>
